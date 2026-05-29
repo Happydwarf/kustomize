@@ -1,0 +1,48 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clinic-deploy
+  labels:
+    myversion: "1"
+spec:
+
+  template:
+
+    spec: # specification du pod
+
+      containers:
+        - name: springboot
+          env:
+            - name: SERVER_SERVLET_CONTEXT_PATH # On force le contexte de l'application à tp6
+              value: "/tp7"
+          startupProbe:
+            httpGet:
+              path: /tp7/actuator/health/readiness
+
+
+          livenessProbe:
+            httpGet:
+              path: /tp7/actuator/health/liveness
+
+
+          readinessProbe:
+            httpGet:
+              path: /tp7/actuator/health/readiness
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: clinic-ingress
+spec:
+  rules:
+  - http:
+      paths:
+      - pathType: Prefix
+        path: /tp7 # On fait référence au contexte de l'application
+        backend:
+          service:
+            name: clinic-service
+            port:
+              number: 8080

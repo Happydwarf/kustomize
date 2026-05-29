@@ -1,0 +1,20 @@
+namespace: tp7-kustomize
+
+images:
+  # On garde `images:` pour piloter le tag depuis l'overlay (démonstration rollout)
+  # Ici on ne change pas le repository, seulement la version (newTag)
+  - name: ghcr.io/happydwarf/spring-petclinic
+    newName: ghcr.io/happydwarf/spring-petclinic
+    newTag: 4.0.1-SNAPSHOT
+resources:
+  - ../base
+
+patches:
+  - path: patch_rooting.yaml
+  - path: replicas.yaml
+    target:
+      kind: Deployment
+      name: clinic-deploy
+
+
+      
