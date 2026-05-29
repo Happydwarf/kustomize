@@ -5,7 +5,6 @@ metadata:
   name: clinic-deploy
   labels:
     myversion: "1"
-spec:
 
 spec:
   replicas: 3
